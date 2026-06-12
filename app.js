@@ -1,12 +1,14 @@
 class Producto {
 
+    #id
     #nombre
     #precio
     #categoria
     #descripcion
     #imagen
 
-    constructor(nombre, precio, categoria, descripcion, imagen) {
+    constructor(id, nombre, precio, categoria, descripcion, imagen) {
+        this.#id = id
         this.#nombre = nombre
         this.#precio = precio
         this.#categoria = categoria
@@ -20,6 +22,9 @@ class Producto {
         } else {
             throw Error('El precio del cantidad de producto no es válida')
         }
+    }
+    get id() {
+        return this.#id
     }
 
     get nombre() {
@@ -41,6 +46,8 @@ class Producto {
     get imagen() {
         return this.#imagen
     }
+
+
 }
 
 class Carrito {
@@ -52,12 +59,16 @@ class Carrito {
     constructor(nombre, precio, cantidad) {
         this.#nombreProducto = nombre
         this.#precio = precio
-        this.#cantidad = cantidad
+        this.cantidad = cantidad
         this.total = 0
     }
 
     set total(value) {
         this.#total = value
+    }
+
+    set cantidad(value) {
+        this.#cantidad = value
     }
 
     get nombreProducto() {
@@ -81,38 +92,114 @@ class Carrito {
         this.#total = calcular
     }
 
-
 }
 
 
-let producto1 = new Producto('Café Americano', 12.00, 'Bebida caliente', 'Café negro tradicional', './images/Americano.png')
-let producto2 = new Producto('Café Latte', 18.00, 'Bebida caliente ', 'Café con leche espumada', './images/coffee-latte.jpg')
-let producto3 = new Producto('Frappe de Chocolate', 25.00, 'Bebida fría', 'Bebida fría con chocolate y crema', './images/frapuccino_de_chocolate.jpg')
-let producto4 = new Producto('Smoothie de Fresa', 22.00, 'Bebida  fría', 'Batido natural de fresa', './images/smoothie-fresa-zarzamora-2.jpg')
-let producto5 = new Producto('Muffin de Vainilla', 15.00, 'Postre ', 'Pan dulce suave de vainilla', './images/moffin.jpg')
-let producto6 = new Producto('Cheesecake', 28.00, ' Postre', 'Pastel frío de queso', './images/cheesecake-1024x678.jpg')
-let producto7 = new Producto('Sandwich de Pollo', 30.00, 'Comida ', 'Sandwich con pollo y vegetales', './images/sandwich-de-pollo.jpg')
-let producto8 = new Producto('Bagel con Queso', 20.00, 'Comida ', 'Bagel tostado con queso crema', './images/bagel-prodimg_1024x.webp')
-
-
+let producto1 = new Producto('1', 'Café Americano', 12.00, 'Bebida caliente', 'Café negro tradicional', './images/Americano.png')
+let producto2 = new Producto('2', 'Café Latte', 18.00, 'Bebida caliente ', 'Café con leche espumada', './images/coffee-latte.jpg')
+let producto3 = new Producto('3', 'Frappe de Chocolate', 25.00, 'Bebida fría', 'Bebida fría con chocolate y crema', './images/frapuccino_de_chocolate.jpg')
+let producto4 = new Producto('4', 'Smoothie de Fresa', 22.00, 'Bebida  fría', 'Batido natural de fresa', './images/smoothie-fresa-zarzamora-2.jpg')
+let producto5 = new Producto('5', 'Muffin de Vainilla', 15.00, 'Postre ', 'Pan dulce suave de vainilla', './images/moffin.jpg')
+let producto6 = new Producto('6', 'Cheesecake', 28.00, ' Postre', 'Pastel frío de queso', './images/cheesecake-1024x678.jpg')
+let producto7 = new Producto('7', 'Sandwich de Pollo', 30.00, 'Comida ', 'Sandwich con pollo y vegetales', './images/sandwich-de-pollo.jpg')
+let producto8 = new Producto('8', 'Bagel con Queso', 20.00, 'Comida ', 'Bagel tostado con queso crema', './images/bagel-prodimg_1024x.webp')
 
 let productos = [producto1, producto2, producto3, producto4, producto5, producto6, producto7, producto8]
 
-productos.forEach(producto => {
-    console.log(producto.nombre)
+let listaProductos = document.querySelector('#lista-productos')
+let carritoVacio = document.querySelector('#pedido-vacio-msg')
+let visualPedido = document.querySelector('#contenedor-pedido')
+
+
+let html = ''
+let cantidadProductos = 0
+let pedidos = []
+let incluye = false
+
+listaProductos.addEventListener('click', (event) => {
+
+    if (event.target.id != '') {
+        carritoVacio.classList.add('d-none')
+        let buscar = productos.find(producto => producto.id == event.target.id)
+
+        pedidos.forEach(producto => producto.nombreProducto == buscar.nombre ? incluye = true : incluye = false)
+
+        console.log(incluye)
+
+        if (!incluye) {
+            let orden = new Carrito(buscar.nombre, buscar.precio, 1, buscar.precio)
+
+            pedidos.push(orden)
+
+            html = `<div class="order-item p-3 border-bottom d-flex justify-content-between align-items-center ">
+                    <div>
+                        <h6 class="fw-bold mb-0 text-dark">${buscar.nombre}</h6>
+                          <small class="text-muted">Unitario: Q${buscar.precio}.00 | Subtotal: <span class="total-cantidad fw-medium text-dark">Q00.00</span></small>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <div class="input-group input-group-sm quantity-control ">
+                            <button class="btn btn-outline-secondary btn-decrementar ${buscar.id}" type="button">-</button>
+                           <span class="px-2 fw-bold text-center align-self-center quantity-value">1</span>
+                            <button class="btn btn-outline-secondary btn-incrementar ${buscar.id}"
+                                  type="button">+</button>
+                        </div>
+                            <button class="btn btn-sm text-danger border-0 btn-eliminar-item ${buscar.id} " title="Eliminar">
+                                        <i class="bi bi-x-circle-fill fs-5"></i>
+                            </button>
+                    </div>
+                </div>`
+            visualPedido.insertAdjacentHTML('afterbegin', html)
+            html = ''
+
+            let btn = document.querySelector('.btn-decrementar')
+            btn.addEventListener('click', (event) => {
+
+                console.log(event.target)
+            })
+
+            let btn2 = document.querySelector('.btn-incrementar')
+            btn2.addEventListener('click', (event) => {
+
+                console.log(event.target)
+            })
+
+        } else {
+
+
+        }
+        console.log(pedidos)
+    }
 })
 
-// for (let i = 0; i < productos.length; i++) {
 
 
-//     for (let n = 0; n < 5; n++) {
+const dibujar = () => {
+    productos.forEach(producto => {
 
-//     }
+        html += `
+    <div class="col producto-item" data-categoria="Bebida caliente">
+        <div class="card h-100 product-coffee-card shadow-sm">
+            <span class="badge-category-float">${producto.categoria}</span>
+            <img src="${producto.imagen}"
+                    class="card-img-top product-image" alt="${producto.nombre}">
+            <div class="card-body d-flex flex-column p-4">             
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h5 class="card-title fw-bold m-0 product-name">${producto.nombre}</h5>
+                        <span class="product-price fw-bold">Q${producto.precio}.00</span>
+                    </div>     
+               <p class="card-text text-muted small flex-grow-1">${producto.descripcion}</p>
+                <button class="btn btn-accent-coffee w-100 mt-3 btn-agregar-pedido" id="${producto.id}">
+                         <i class="bi bi-plus-lg me-1"></i> Agregar al Pedido
+                </button>
+             </div>
+        </div>
+    </div>
+    `
+    })
+    listaProductos.innerHTML = html
+    html = ''
+}
 
-// }
 
+dibujar()
 
-// arreglo.push(new Producto(item))
-
-
-// console.log(arreglo[1].nombre)
