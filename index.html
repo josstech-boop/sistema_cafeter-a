@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coffee Shop - Sistema de Pedidos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header class="hero-section text-center text-white d-flex justify-content-center">
+        <div class="overlay"></div>
+        <div class="position-relative container py-4 ">
+            <span class="text-uppercase tracking-wide text-accent fs-7">"Bienvenido a la Cafetería AROMA"</span>
+            <h1 class="display-5 fw-bold playfair-title mt-2"> Servimos el mejor café de la ciudad</h1>
+            <p class="lead small-text mx-auto text-light-50" style="max-width: 600px;">
+                Elige tus productos favoritos, personaliza tu pedido y disfruta de la mejor experiencia desde la
+                comodidad de tu asiento.
+            </p>
+        </div>
+    </header>
+
+    <main class="container my-5">
+        <div class="row g-4">
+
+            <section class="col-lg-8">
+
+                <div class="card p-3 mb-4 border-0 shadow-sm custom-card">
+                    <div class="row g-4 align-items-center">
+                        <div class="col-md-1">
+                            <div class="input-group">
+                                <img class="logo-cafeteria m-3" src="./images/firmar.png" alt="logo-cafeteria"
+                                    width="70px" height="70px">
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="d-flex flex-wrap gap-2 justify-content-md-end" id="contenedor-filtros">
+                                <button class="btn btn-filter active" data-categoria="todos">Todas</button>
+                                <button class="btn btn-filter" data-categoria="Bebida caliente">Calientes</button>
+                                <button class="btn btn-filter" data-categoria="Bebida fría">Frías</button>
+                                <button class="btn btn-filter" data-categoria="Postre">Postres</button>
+                                <button class="btn btn-filter" data-categoria="Comida">Comida</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row row-cols-1 row-cols-md-2 g-4" id="lista-productos">
+
+                    <div class="col producto-item" data-categoria="Bebida caliente">
+                        <div class="card h-100 product-coffee-card shadow-sm">
+                            <span class="badge-category-float">Bebida caliente</span>
+                            <img src="https://images.unsplash.com/photo-1541167760496-1628856ab772?q=80&w=500&auto=format&fit=crop"
+                                class="card-img-top product-image" alt="Café Latte">
+                            <div class="card-body d-flex flex-column p-4">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <h5 class="card-title fw-bold m-0 product-name">Café Latte</h5>
+                                    <span class="product-price fw-bold">Q18.00</span>
+                                </div>
+                                <p class="card-text text-muted small flex-grow-1">Café con leche espumada y un toque de
+                                    arte latte.</p>
+                                <button class="btn btn-accent-coffee w-100 mt-3 btn-agregar-pedido" data-id="1">
+                                    <i class="bi bi-plus-lg me-1"></i> Agregar al Pedido
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <section class="col-lg-4">
+                <div class="sticky-top" style="top: 20px; z-index: 10;">
+
+                    <div class="card border-0 shadow-sm mb-4 custom-card overflow-hidden">
+                        <div
+                            class="card-header bg-dark-coffee text-white p-3 d-flex justify-content-between align-items-center">
+                            <h5 class="m-0 fw-bold"><i class="bi bi-cup-hot-fill me-2"></i>Tu Pedido</h5>
+                            <button class="btn btn-sm btn-outline-light border-0" id="btn-vaciar-pedido"
+                                title="Vaciar todo el pedido">
+                                <i class="bi bi-trash3"></i> Vaciar
+                            </button>
+                        </div>
+
+                        <div class="card-body p-0 dynamic-order-container" id="contenedor-pedido"
+                            style="max-height: 350px; overflow-y: auto;">
+
+                            <div class="text-center p-5 text-muted" id="pedido-vacio-msg">
+                                <i class="bi bi-cart-dash display-6 mb-2 d-block text-secondary"></i>
+                                <p class="mb-0">No has agregado productos a tu pedido.</p>
+                            </div>
+
+                            <div class="order-item p-3 border-bottom d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="fw-bold mb-0 text-dark">Café Latte</h6>
+                                    <small class="text-muted">Unitario: Q18.00 | Subtotal: <span
+                                            class="fw-medium text-dark">Q36.00</span></small>
+                                </div>
+
+                                <div class="d-flex align-items-center">
+
+                                    <div class="input-group input-group-sm quantity-control ">
+                                        <button class="btn btn-outline-secondary btn-decrementar"
+                                            type="button">-</button>
+                                        <span class="px-2 fw-bold text-center align-self-center quantity-value">2</span>
+                                        <button class="btn btn-outline-secondary btn-incrementar"
+                                            type="button">+</button>
+                                    </div>
+
+                                    <button class="btn btn-sm text-danger border-0 btn-eliminar-item" title="Eliminar">
+                                        <i class="bi bi-x-circle-fill fs-5"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="card-footer bg-light p-3 border-0 mt-auto">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="text-muted">Subtotal:</span>
+                                <span class="fw-medium" id="subtotal-pedido">Q0.00</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="text-muted">Impuesto / Recargo (12%):</span>
+                                <span class="fw-medium" id="impuesto-pedido">Q0.00</span>
+                            </div>
+                            <hr class="my-2 border-secondary opacity-25">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="fw-bold text-dark fs-5">Total Final:</span>
+                                <span class="fw-bold text-accent fs-4" id="total-pedido">Q0.00</span>
+                            </div>
+                            <button class="btn btn-accent w-100 py-2.5 fw-bold text-uppercase tracking-wide shadow-sm"
+                                id="btn-finalizar">
+                                <i class="bi bi-check2-circle me-1"></i> Finalizar Pedido
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card border-0 shadow-sm bg-success-light text-success-dark border-start-accent p-3 "
+                        id="seccion-resumen-final">
+                        <div class="text-center mb-3">
+                            <i class="bi bi-bag-check-fill text-success fs-1"></i>
+                            <h5 class="fw-bold mt-2 mb-1">¡Pedido Finalizado!</h5>
+                            <p class="small text-muted mb-0">Gracias por tu compra.</p>
+                        </div>
+                        <div class="bg-white rounded p-3 shadow-inner text-dark mb-2">
+                            <h6 class="fw-bold small text-uppercase text-muted border-bottom pb-1 mb-2">Resumen Final:
+                            </h6>
+                            <ul class="list-unstyled small mb-0" id="resumen-productos-final">
+                                <li>• Café Latte x2 = Q36.00</li>
+                                <li>• Muffin de Vainilla x1 = Q15.00</li>
+                            </ul>
+                            <hr class="my-2">
+                            <div class="d-flex justify-content-between font-weight-bold fw-bold">
+                                <span>Total Pagado:</span>
+                                <span class="text-accent" id="resumen-total-final">Q51.00</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

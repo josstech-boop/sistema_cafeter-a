@@ -1,0 +1,254 @@
+/* --- Variables de Color (Cafetería Premium) --- */
+:root {
+    --primary-coffee: #2c1d11 !important;
+    /* Café espresso profundo */
+    --secondary-coffee: #4a3728 !important;
+    /* Café tostado medio */
+    --accent-orange: #e07a3a !important;
+    /* Naranja cálido/caramelo */
+    --light-cream: #f4eee4 !important;
+    /* Fondo crema suave estilo taza de latte */
+    --card-bg: #fffbf7 !important;
+    /* Fondo de tarjetas crema claro */
+    --body-text: #3d2b1f !important;
+    /* Texto en tono café oscuro */
+    --border-color: #e6ded6 !important;
+    /* Bordes suaves color canela claro */
+}
+
+/* --- Estilos Generales Obligatorios --- */
+html,
+body {
+    background-color: #f4eee4 !important;
+    /* Forzamos el fondo crema en toda la app */
+    color: #3d2b1f !important;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.95rem;
+    box-sizing: border-box;
+}
+
+.playfair-title {
+    font-family: 'Playfair Display', serif;
+}
+
+.text-accent {
+    color: #e07a3a !important;
+}
+
+/* --- Modificación de Tarjetas y Contenedores de Bootstrap --- */
+.card,
+.custom-card,
+.product-card {
+    background-color: #fffbf7 !important;
+    /* Forzamos el fondo almendrado de la tarjeta */
+    border: 1px solid #e6ded6 !important;
+    border-radius: 12px !important;
+}
+
+.product-card {
+    position: relative;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    padding-top: 30px !important;
+    /* Espacio para que la etiqueta de arriba no choque */
+}
+
+.product-card:hover {
+    transform: translateY(-4px);
+    border-color: #e07a3a !important;
+    box-shadow: 0 8px 24px rgba(74, 55, 40, 0.15) !important;
+}
+
+/* Encabezado del Pedido */
+.card-header.bg-dark-coffee {
+    background-color: #2c1d11 !important;
+    color: #f4eee4 !important;
+}
+
+/* El texto de "Tu Pedido" que se veía blanco invisible */
+.card-header h5,
+.card-header button {
+    color: #fffbf7 !important;
+}
+
+/* --- Etiquetas de Categoría (Badge) --- */
+.badge-category {
+    background-color: #e07a3a !important;
+    /* Fondo naranja llamativo */
+    color: #ffffff !important;
+    /* Texto blanco para que resalte */
+    font-weight: 600;
+    font-size: 0.75rem;
+    padding: 6px 14px;
+    border-radius: 12px 0 12px 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    z-index: 2;
+}
+
+/* --- Botones --- */
+.btn-coffee {
+    background-color: transparent !important;
+    color: #2c1d11 !important;
+    border: 1.5px solid #2c1d11 !important;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.2s;
+}
+
+.btn-coffee:hover {
+    background-color: #2c1d11 !important;
+    color: #f4eee4 !important;
+}
+
+.btn-accent {
+    background-color: #e07a3a !important;
+    border: none !important;
+    color: white !important;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+
+.btn-accent:hover {
+    background-color: #c56327 !important;
+}
+
+/* Filtros de Categorías */
+.btn-filter {
+    background-color: #ffffff !important;
+    color: #4a3728 !important;
+    border: 1px solid #e6ded6 !important;
+    border-radius: 20px !important;
+    padding: 6px 18px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.btn-filter:hover,
+.btn-filter.active {
+    background-color: #4a3728 !important;
+    color: #f4eee4 !important;
+    border-color: #4a3728 !important;
+}
+
+/* --- Área de Pedido Activo (Footer) --- */
+.card-footer {
+    background-color: #ebe3d5 !important;
+    /* Fondo café claro para los totales */
+    border-top: 1px solid #e6ded6 !important;
+}
+
+.order-item {
+    border-bottom: 1px solid #e6ded6 !important;
+}
+
+.order-item:hover {
+    background-color: #fcf9f5 !important;
+}
+
+/* Buscador */
+#buscador-productos,
+.input-group-text {
+    background-color: #ffffff !important;
+    border: 1px solid #e6ded6 !important;
+    color: #3d2b1f !important;
+}
+
+/* Scrollbar estética */
+#contenedor-pedido::-webkit-scrollbar {
+    width: 6px;
+}
+
+#contenedor-pedido::-webkit-scrollbar-track {
+    background: #f4eee4;
+}
+
+#contenedor-pedido::-webkit-scrollbar-thumb {
+    background: #4a3728;
+    border-radius: 10px;
+}
+
+.hero-section {
+    background-color: #c56327 !important;
+}
+
+.text-uppercase {
+    color: #fffbf7 !important;
+}
+
+/* --- Tarjeta estilo Bootstrap con Imagen --- */
+.product-coffee-card {
+    background-color: #fffbf7 !important;
+    /* Fondo almendrado */
+    border: 1px solid #e6ded6 !important;
+    /* Borde canela suave */
+    border-radius: 12px !important;
+    overflow: hidden;
+    position: relative;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.product-coffee-card:hover {
+    transform: translateY(-5px);
+    border-color: #e07a3a !important;
+    /* Cambia a naranja al pasar el mouse */
+    box-shadow: 0 12px 25px rgba(74, 55, 40, 0.15) !important;
+}
+
+/* Control estricto de la imagen para que no se deforme */
+.product-image {
+    height: 180px !important;
+    object-fit: cover;
+    /* Hace que la imagen llene el espacio sin estirarse */
+    border-bottom: 1px solid #e6ded6;
+}
+
+/* Título y Precio del producto */
+.product-name {
+    color: #2c1d11 !important;
+    /* Café espresso */
+    font-size: 1.1rem;
+}
+
+.product-price {
+    color: #e07a3a !important;
+    /* Naranja caramelo */
+    font-size: 1.1rem;
+}
+
+/* Pequeña etiqueta flotante sobre la imagen */
+.badge-category-float {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background-color: rgba(44, 29, 17, 0.85) !important;
+    /* Fondo café oscuro transparente */
+    color: #fffbf7 !important;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 6px;
+    letter-spacing: 0.5px;
+    z-index: 3;
+}
+
+/* Botón de acción estilo cafetería */
+.btn-accent-coffee {
+    background-color: #e07a3a !important;
+    /* Naranja por defecto */
+    color: white !important;
+    border: none !important;
+    font-weight: 500;
+    padding: 10px;
+    border-radius: 8px !important;
+    transition: background-color 0.2s ease;
+}
+
+.btn-accent-coffee:hover {
+    background-color: #2c1d11 !important;
+    /* Cambia a café oscuro al pasar el mouse */
+}
