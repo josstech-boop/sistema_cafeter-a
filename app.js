@@ -1,5 +1,4 @@
 class Producto {
-
     #id
     #nombre
     #precio
@@ -51,15 +50,17 @@ class Producto {
 }
 
 class Carrito {
+    #id
     #nombreProducto
     #precio
     #cantidad
     #total
 
-    constructor(nombre, precio, cantidad) {
+    constructor(nombre, precio, id) {
+        this.#id = id
         this.#nombreProducto = nombre
         this.#precio = precio
-        this.cantidad = cantidad
+        this.cantidad = 1
         this.total = 0
     }
 
@@ -92,23 +93,30 @@ class Carrito {
         this.#total = calcular
     }
 
+    sumarCantidad() {
+        this.cantidad++
+    }
+
 }
 
 
-let producto1 = new Producto('1', 'Café Americano', 12.00, 'Bebida caliente', 'Café negro tradicional', './images/Americano.png')
-let producto2 = new Producto('2', 'Café Latte', 18.00, 'Bebida caliente ', 'Café con leche espumada', './images/coffee-latte.jpg')
-let producto3 = new Producto('3', 'Frappe de Chocolate', 25.00, 'Bebida fría', 'Bebida fría con chocolate y crema', './images/frapuccino_de_chocolate.jpg')
-let producto4 = new Producto('4', 'Smoothie de Fresa', 22.00, 'Bebida  fría', 'Batido natural de fresa', './images/smoothie-fresa-zarzamora-2.jpg')
-let producto5 = new Producto('5', 'Muffin de Vainilla', 15.00, 'Postre ', 'Pan dulce suave de vainilla', './images/moffin.jpg')
-let producto6 = new Producto('6', 'Cheesecake', 28.00, ' Postre', 'Pastel frío de queso', './images/cheesecake-1024x678.jpg')
-let producto7 = new Producto('7', 'Sandwich de Pollo', 30.00, 'Comida ', 'Sandwich con pollo y vegetales', './images/sandwich-de-pollo.jpg')
-let producto8 = new Producto('8', 'Bagel con Queso', 20.00, 'Comida ', 'Bagel tostado con queso crema', './images/bagel-prodimg_1024x.webp')
+let producto1 = new Producto('cafe-americano', 'Café Americano', 12.00, 'Bebida caliente', 'Café negro tradicional', './images/Americano.png')
+let producto2 = new Producto('cafe-latte', 'Café Latte', 18.00, 'Bebida caliente ', 'Café con leche espumada', './images/coffee-latte.jpg')
+let producto3 = new Producto('frape-choco', 'Frappe de Chocolate', 25.00, 'Bebida fría', 'Bebida fría con chocolate y crema', './images/frapuccino_de_chocolate.jpg')
+let producto4 = new Producto('smothi-fresa', 'Smoothie de Fresa', 22.00, 'Bebida  fría', 'Batido natural de fresa', './images/smoothie-fresa-zarzamora-2.jpg')
+let producto5 = new Producto('muffin', 'Muffin de Vainilla', 15.00, 'Postre ', 'Pan dulce suave de vainilla', './images/moffin.jpg')
+let producto6 = new Producto('chees', 'Cheesecake', 28.00, ' Postre', 'Pastel frío de queso', './images/cheesecake-1024x678.jpg')
+let producto7 = new Producto('sandwich', 'Sandwich de Pollo', 30.00, 'Comida ', 'Sandwich con pollo y vegetales', './images/sandwich-de-pollo.jpg')
+let producto8 = new Producto('bagel', 'Bagel con Queso', 20.00, 'Comida ', 'Bagel tostado con queso crema', './images/bagel-prodimg_1024x.webp')
 
 let productos = [producto1, producto2, producto3, producto4, producto5, producto6, producto7, producto8]
 
 let listaProductos = document.querySelector('#lista-productos')
 let carritoVacio = document.querySelector('#pedido-vacio-msg')
 let visualPedido = document.querySelector('#contenedor-pedido')
+
+
+
 
 
 let html = ''
@@ -121,13 +129,12 @@ listaProductos.addEventListener('click', (event) => {
     if (event.target.id != '') {
         carritoVacio.classList.add('d-none')
         let buscar = productos.find(producto => producto.id == event.target.id)
-
         pedidos.forEach(producto => producto.nombreProducto == buscar.nombre ? incluye = true : incluye = false)
 
         console.log(incluye)
 
         if (!incluye) {
-            let orden = new Carrito(buscar.nombre, buscar.precio, 1, buscar.precio)
+            let orden = new Carrito(buscar.nombre, buscar.precio, buscar.id)
 
             pedidos.push(orden)
 
@@ -151,21 +158,22 @@ listaProductos.addEventListener('click', (event) => {
             visualPedido.insertAdjacentHTML('afterbegin', html)
             html = ''
 
-            let btn = document.querySelector('.btn-decrementar')
-            btn.addEventListener('click', (event) => {
+            let btnIncrementar = document.querySelector('.btn-incrementar')
+            let btnDecrementar = document.querySelector('.btn-decrementar')
 
-                console.log(event.target)
+            btnDecrementar.addEventListener('click', (event) => {
+                if (event.target.classList.contains(buscar.id)) {
+                    console.log(`decrementar${buscar.id}`)
+                }
             })
-
-            let btn2 = document.querySelector('.btn-incrementar')
-            btn2.addEventListener('click', (event) => {
-
-                console.log(event.target)
+            btnIncrementar.addEventListener('click', (event) => {
+                if (event.target.classList.contains(buscar.id)) {
+                    console.log(` incrementar${buscar.id}`)
+                }
             })
 
         } else {
-
-
+            pedidos.forEach(producto => producto.nombreProducto == buscar.nombre ? producto.sumarCantidad() : producto)
         }
         console.log(pedidos)
     }
