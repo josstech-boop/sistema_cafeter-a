@@ -88,6 +88,10 @@ class Carrito {
         return this.#total
     }
 
+    get id() {
+        return this.#id
+    }
+
     precioTotal(cantidad) {
         let calcular = this.#precio * cantidad
         this.#total = calcular
@@ -158,19 +162,19 @@ listaProductos.addEventListener('click', (event) => {
             visualPedido.insertAdjacentHTML('afterbegin', html)
             html = ''
 
-            let btnIncrementar = document.querySelector('.btn-incrementar')
-            let btnDecrementar = document.querySelector('.btn-decrementar')
+            // let btnIncrementar = document.querySelector('.btn-incrementar')
+            // let btnDecrementar = document.querySelector('.btn-decrementar')
 
-            btnDecrementar.addEventListener('click', (event) => {
-                if (event.target.classList.contains(buscar.id)) {
-                    console.log(`decrementar${buscar.id}`)
-                }
-            })
-            btnIncrementar.addEventListener('click', (event) => {
-                if (event.target.classList.contains(buscar.id)) {
-                    console.log(` incrementar${buscar.id}`)
-                }
-            })
+            // btnDecrementar.addEventListener('click', (event) => {
+            //     if (event.target.classList.contains(buscar.id)) {
+            //         console.log(`decrementar${buscar.id}`)
+            //     }
+            // })
+            // btnIncrementar.addEventListener('click', (event) => {
+            //     if (event.target.classList.contains(buscar.id)) {
+            //         console.log(` incrementar${buscar.id}`)
+            //     }
+            // })
 
         } else {
             pedidos.forEach(producto => producto.nombreProducto == buscar.nombre ? producto.sumarCantidad() : producto)
@@ -207,6 +211,18 @@ const dibujar = () => {
     listaProductos.innerHTML = html
     html = ''
 }
+
+// aun falta terminar esta parte 
+
+visualPedido.addEventListener('click', (event) => {
+
+    console.log(event.target.classList)
+    let clase = event.target.classList.value
+
+    console.log(clase)
+
+    pedidos.forEach(pedido => clase.includes(pedido.id) ? console.log('si lo incluye') : pedido)
+})
 
 
 dibujar()
