@@ -70,6 +70,8 @@ class Carrito {
 
     set cantidad(value) {
         this.#cantidad = value
+        this.subtotal()
+
     }
 
     get nombreProducto() {
@@ -107,6 +109,10 @@ class Carrito {
         }
     }
 
+    subtotal() {
+        this.#total = this.#cantidad * this.#precio
+    }
+
 }
 
 
@@ -125,10 +131,6 @@ let listaProductos = document.querySelector('#lista-productos')
 let carritoVacio = document.querySelector('#pedido-vacio-msg')
 let visualPedido = document.querySelector('#contenedor-pedido')
 
-
-
-
-
 let html = ''
 let cantidadProductos = 0
 let pedidos = []
@@ -141,29 +143,22 @@ listaProductos.addEventListener('click', (event) => {
         let buscar = productos.find(producto => producto.id == event.target.id)
         pedidos.forEach(producto => producto.nombreProducto == buscar.nombre ? incluye = true : incluye = false)
 
-        console.log(incluye)
-
         if (!incluye) {
             let orden = new Carrito(buscar.nombre, buscar.precio, buscar.id)
-
             pedidos.push(orden)
-
             dibujarPedidos()
 
         } else {
             pedidos.forEach(pedido => pedido.nombreProducto == buscar.nombre ? pedido.sumarCantidad() : pedido)
             dibujarPedidos()
         }
-        console.log(pedidos)
     }
 })
 
-const dibujarPedidos = (buscar) => {
-
+const dibujarPedidos = () => {
 
     pedidos.forEach(pedido => {
-
-        html = `<div class="order-item p-3 border-bottom d-flex justify-content-between align-items-center ">
+        html += `<div class="order-item p-3 border-bottom d-flex justify-content-between align-items-center ">
                     <div>
                         <h6 class="fw-bold mb-0 text-dark">${pedido.nombreProducto}</h6>
                           <small class="text-muted">Unitario: Q${pedido.precio}.00 | Subtotal: <span class="total-cantidad fw-medium text-dark">Q${pedido.total}</span></small>
@@ -175,26 +170,22 @@ const dibujarPedidos = (buscar) => {
                             <button class="btn btn-outline-secondary btn-incrementar ${pedido.id}"
                                   type="button">+</button>
                         </div>
-                            <button class="btn btn-sm text-danger border-0 btn-eliminar-item ${pedido.id} " title="Eliminar">
-                                        <i class="bi bi-x-circle-fill fs-5"></i>
-                            </button>
+                            <button class="btn text-white ${pedido.id}  btn-eliminar-item m-2" title="Eliminar"><i class="bi bi-x-lg ${pedido.id}">delete</i></button>
                     </div>
                 </div>`
     })
 
 
-    visualPedido.insertAdjacentHTML('afterbegin', html)
+
+
+    visualPedido.innerHTML = html
     html = ''
 
 }
 
 
-const dibujar = () => {
-
-    visualPedido.innerHTML = ''
-
+const dibujarProductos = () => {
     productos.forEach(producto => {
-
         html += `
     <div class="col producto-item" data-categoria="Bebida caliente">
         <div class="card h-100 product-coffee-card shadow-sm">
@@ -208,7 +199,7 @@ const dibujar = () => {
                     </div>     
                <p class="card-text text-muted small flex-grow-1">${producto.descripcion}</p>
                 <button class="btn btn-accent-coffee w-100 mt-3 btn-agregar-pedido" id="${producto.id}">
-                         <i class="bi bi-plus-lg me-1"></i> Agregar al Pedido
+                         <i class="bi bi-plus-lg me-1 "></i> Agregar al Pedido
                 </button>
              </div>
         </div>
@@ -219,13 +210,31 @@ const dibujar = () => {
     html = ''
 }
 
+const eliminarProductoI = (id) => {
+
+    pedidos = pedidos.filter(pedido => pedido.id != id)
+
+    dibujarPedidos()
+}
+
 
 visualPedido.addEventListener('click', (event) => {
     let clase = event.target.classList.value
+
+    console.log(event.target.classList.value)
+
     pedidos.forEach(pedido => {
         if (clase.includes(pedido.id)) {
-            event.target.textContent == '+' ? pedido.sumarCantidad() : pedido.restarCantidad()
 
+            if (event.target.textContent == '+') {
+                pedido.sumarCantidad()
+            } else if (event.target.textContent == '-') {
+                pedido.restarCantidad()
+            } else if (clase.includes(`${pedido.id}`)) {
+                console.log(pedido.id)
+                eliminarProductoI(pedido.id)
+                console.log('elemento eliminado')
+            }
         }
     })
     dibujarPedidos()
@@ -233,5 +242,5 @@ visualPedido.addEventListener('click', (event) => {
 })
 
 
-dibujar()
+dibujarProductos()
 
