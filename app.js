@@ -101,6 +101,12 @@ class Carrito {
         this.cantidad++
     }
 
+    restarCantidad() {
+        if (this.#cantidad > 1) {
+            this.cantidad--
+        }
+    }
+
 }
 
 
@@ -142,50 +148,51 @@ listaProductos.addEventListener('click', (event) => {
 
             pedidos.push(orden)
 
-            html = `<div class="order-item p-3 border-bottom d-flex justify-content-between align-items-center ">
-                    <div>
-                        <h6 class="fw-bold mb-0 text-dark">${buscar.nombre}</h6>
-                          <small class="text-muted">Unitario: Q${buscar.precio}.00 | Subtotal: <span class="total-cantidad fw-medium text-dark">Q00.00</span></small>
-                    </div>
-                    <div class="d-flex align-items-center">
-                        <div class="input-group input-group-sm quantity-control ">
-                            <button class="btn btn-outline-secondary btn-decrementar ${buscar.id}" type="button">-</button>
-                           <span class="px-2 fw-bold text-center align-self-center quantity-value">1</span>
-                            <button class="btn btn-outline-secondary btn-incrementar ${buscar.id}"
-                                  type="button">+</button>
-                        </div>
-                            <button class="btn btn-sm text-danger border-0 btn-eliminar-item ${buscar.id} " title="Eliminar">
-                                        <i class="bi bi-x-circle-fill fs-5"></i>
-                            </button>
-                    </div>
-                </div>`
-            visualPedido.insertAdjacentHTML('afterbegin', html)
-            html = ''
-
-            // let btnIncrementar = document.querySelector('.btn-incrementar')
-            // let btnDecrementar = document.querySelector('.btn-decrementar')
-
-            // btnDecrementar.addEventListener('click', (event) => {
-            //     if (event.target.classList.contains(buscar.id)) {
-            //         console.log(`decrementar${buscar.id}`)
-            //     }
-            // })
-            // btnIncrementar.addEventListener('click', (event) => {
-            //     if (event.target.classList.contains(buscar.id)) {
-            //         console.log(` incrementar${buscar.id}`)
-            //     }
-            // })
+            dibujarPedidos()
 
         } else {
-            pedidos.forEach(producto => producto.nombreProducto == buscar.nombre ? producto.sumarCantidad() : producto)
+            pedidos.forEach(pedido => pedido.nombreProducto == buscar.nombre ? pedido.sumarCantidad() : pedido)
+            dibujarPedidos()
         }
         console.log(pedidos)
     }
 })
 
+const dibujarPedidos = (buscar) => {
+
+
+    pedidos.forEach(pedido => {
+
+        html = `<div class="order-item p-3 border-bottom d-flex justify-content-between align-items-center ">
+                    <div>
+                        <h6 class="fw-bold mb-0 text-dark">${pedido.nombreProducto}</h6>
+                          <small class="text-muted">Unitario: Q${pedido.precio}.00 | Subtotal: <span class="total-cantidad fw-medium text-dark">Q${pedido.total}</span></small>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <div class="input-group input-group-sm quantity-control ">
+                            <button class="btn btn-outline-secondary btn-decrementar ${pedido.id}" type="button">-</button>
+                           <span class="px-2 fw-bold text-center align-self-center quantity-value">${pedido.cantidad}</span>
+                            <button class="btn btn-outline-secondary btn-incrementar ${pedido.id}"
+                                  type="button">+</button>
+                        </div>
+                            <button class="btn btn-sm text-danger border-0 btn-eliminar-item ${pedido.id} " title="Eliminar">
+                                        <i class="bi bi-x-circle-fill fs-5"></i>
+                            </button>
+                    </div>
+                </div>`
+    })
+
+
+    visualPedido.insertAdjacentHTML('afterbegin', html)
+    html = ''
+
+}
 
 
 const dibujar = () => {
+
+    visualPedido.innerHTML = ''
+
     productos.forEach(producto => {
 
         html += `
@@ -212,16 +219,17 @@ const dibujar = () => {
     html = ''
 }
 
-// aun falta terminar esta parte 
 
 visualPedido.addEventListener('click', (event) => {
-
-    console.log(event.target.classList)
     let clase = event.target.classList.value
+    pedidos.forEach(pedido => {
+        if (clase.includes(pedido.id)) {
+            event.target.textContent == '+' ? pedido.sumarCantidad() : pedido.restarCantidad()
 
-    console.log(clase)
-
-    pedidos.forEach(pedido => clase.includes(pedido.id) ? console.log('si lo incluye') : pedido)
+        }
+    })
+    dibujarPedidos()
+    console.log(pedidos)
 })
 
 
