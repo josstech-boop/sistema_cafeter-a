@@ -259,3 +259,7 @@ body {
     width: 2.3rem !important;
     height: 2rem !important;
 }
+
+.input {
+    outline: none;
+}

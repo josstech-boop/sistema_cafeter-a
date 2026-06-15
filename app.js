@@ -309,4 +309,3 @@ eliminarPedidos.addEventListener('click', (event) => {
     dibujarPedidos()
 })
 
-dibujarProductos(productos)
