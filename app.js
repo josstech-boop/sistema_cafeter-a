@@ -61,7 +61,7 @@ class Carrito {
         this.#nombreProducto = nombre
         this.#precio = precio
         this.cantidad = 1
-        this.total = 0
+        this.total = precio
     }
 
     set total(value) {
@@ -131,10 +131,22 @@ let listaProductos = document.querySelector('#lista-productos')
 let carritoVacio = document.querySelector('#pedido-vacio-msg')
 let visualPedido = document.querySelector('#contenedor-pedido')
 
+let subtotalPedido = document.querySelector('#subtotal-pedido')
+let impuestoPedido = document.querySelector('#impuesto-pedido')
+let totalFinal = document.querySelector('#total-pedido')
+
+let btnFinalizar = document.querySelector('#btn-finalizar')
+let factura = document.querySelector('#seccion-resumen-final')
+let visualResumen = document.querySelector('#resumen-productos-final')
+let resumenTotalFinal = document.querySelector('#resumen-total-final')
+
 let html = ''
 let cantidadProductos = 0
 let pedidos = []
 let incluye = false
+let subtotal = 0
+let resumenTotal = 0
+
 
 listaProductos.addEventListener('click', (event) => {
 
@@ -158,6 +170,11 @@ listaProductos.addEventListener('click', (event) => {
 const dibujarPedidos = () => {
 
     pedidos.forEach(pedido => {
+
+        subtotal += pedido.total
+
+        console.log(pedido.total)
+
         html += `<div class="order-item p-3 border-bottom d-flex justify-content-between align-items-center ">
                     <div>
                         <h6 class="fw-bold mb-0 text-dark">${pedido.nombreProducto}</h6>
@@ -175,9 +192,13 @@ const dibujarPedidos = () => {
                 </div>`
     })
 
-
-
-
+    let calcularImpuesto = subtotal * 0.05
+    let totalSinImpuesto = subtotal - calcularImpuesto
+    subtotalPedido.textContent = `Q${totalSinImpuesto.toFixed(2)}`
+    impuestoPedido.textContent = `Q${calcularImpuesto.toFixed(2)}`
+    totalFinal.textContent = `Q${subtotal.toFixed(2)}`
+    resumenTotal = subtotal
+    subtotal = 0
     visualPedido.innerHTML = html
     html = ''
 
@@ -210,19 +231,35 @@ const dibujarProductos = () => {
     html = ''
 }
 
-const eliminarProductoI = (id) => {
+const eliminarProducto = (id) => {
 
     pedidos = pedidos.filter(pedido => pedido.id != id)
 
-    dibujarPedidos()
+    if (pedidos.length == 0) {
+        console.log('agrego cotenedor carrito vacio')
+        carritoVacio.classList.remove('d-none')
+
+    } else {
+        dibujarPedidos()
+    }
+
 }
 
+const resumenFinal = () => {
+    pedidos.forEach(pedido => {
+        html += `
+        <li>• ${pedido.nombreProducto} x ${pedido.cantidad} = Q ${pedido.total}.00</li>     `
+    })
+
+    visualResumen.innerHTML = html
+    resumenTotalFinal.textContent = `Q${resumenTotal.toFixed(2)}`
+    html = ''
+    pedidos = []
+
+}
 
 visualPedido.addEventListener('click', (event) => {
     let clase = event.target.classList.value
-
-    console.log(event.target.classList.value)
-
     pedidos.forEach(pedido => {
         if (clase.includes(pedido.id)) {
 
@@ -231,14 +268,20 @@ visualPedido.addEventListener('click', (event) => {
             } else if (event.target.textContent == '-') {
                 pedido.restarCantidad()
             } else if (clase.includes(`${pedido.id}`)) {
-                console.log(pedido.id)
-                eliminarProductoI(pedido.id)
+                eliminarProducto(pedido.id)
                 console.log('elemento eliminado')
             }
         }
     })
     dibujarPedidos()
     console.log(pedidos)
+})
+
+btnFinalizar.addEventListener('click', (event) => {
+    if (pedidos.length > 0) {
+        factura.classList.remove('d-none')
+        resumenFinal()
+    }
 })
 
 
