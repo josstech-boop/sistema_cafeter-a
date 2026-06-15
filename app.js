@@ -46,7 +46,6 @@ class Producto {
         return this.#imagen
     }
 
-
 }
 
 class Carrito {
@@ -112,24 +111,23 @@ class Carrito {
     subtotal() {
         this.#total = this.#cantidad * this.#precio
     }
-
 }
 
-
 let producto1 = new Producto('cafe-americano', 'Café Americano', 12.00, 'Bebida caliente', 'Café negro tradicional', './images/Americano.png')
-let producto2 = new Producto('cafe-latte', 'Café Latte', 18.00, 'Bebida caliente ', 'Café con leche espumada', './images/coffee-latte.jpg')
+let producto2 = new Producto('cafe-latte', 'Café Latte', 18.00, 'Bebida caliente', 'Café con leche espumada', './images/coffee-latte.jpg')
 let producto3 = new Producto('frape-choco', 'Frappe de Chocolate', 25.00, 'Bebida fría', 'Bebida fría con chocolate y crema', './images/frapuccino_de_chocolate.jpg')
-let producto4 = new Producto('smothi-fresa', 'Smoothie de Fresa', 22.00, 'Bebida  fría', 'Batido natural de fresa', './images/smoothie-fresa-zarzamora-2.jpg')
-let producto5 = new Producto('muffin', 'Muffin de Vainilla', 15.00, 'Postre ', 'Pan dulce suave de vainilla', './images/moffin.jpg')
-let producto6 = new Producto('chees', 'Cheesecake', 28.00, ' Postre', 'Pastel frío de queso', './images/cheesecake-1024x678.jpg')
-let producto7 = new Producto('sandwich', 'Sandwich de Pollo', 30.00, 'Comida ', 'Sandwich con pollo y vegetales', './images/sandwich-de-pollo.jpg')
-let producto8 = new Producto('bagel', 'Bagel con Queso', 20.00, 'Comida ', 'Bagel tostado con queso crema', './images/bagel-prodimg_1024x.webp')
+let producto4 = new Producto('smothi-fresa', 'Smoothie de Fresa', 22.00, 'Bebida fría', 'Batido natural de fresa', './images/smoothie-fresa-zarzamora-2.jpg')
+let producto5 = new Producto('muffin', 'Muffin de Vainilla', 15.00, 'Postre', 'Pan dulce suave de vainilla', './images/moffin.jpg')
+let producto6 = new Producto('chees', 'Cheesecake', 28.00, 'Postre', 'Pastel frío de queso', './images/cheesecake-1024x678.jpg')
+let producto7 = new Producto('sandwich', 'Sandwich de Pollo', 30.00, 'Comida', 'Sandwich con pollo y vegetales', './images/sandwich-de-pollo.jpg')
+let producto8 = new Producto('bagel', 'Bagel con Queso', 20.00, 'Comida', 'Bagel tostado con queso crema', './images/bagel-prodimg_1024x.webp')
 
 let productos = [producto1, producto2, producto3, producto4, producto5, producto6, producto7, producto8]
 
 let listaProductos = document.querySelector('#lista-productos')
 let carritoVacio = document.querySelector('#pedido-vacio-msg')
 let visualPedido = document.querySelector('#contenedor-pedido')
+let eliminarPedidos = document.querySelector('#btn-vaciar-pedido')
 
 let subtotalPedido = document.querySelector('#subtotal-pedido')
 let impuestoPedido = document.querySelector('#impuesto-pedido')
@@ -140,13 +138,14 @@ let factura = document.querySelector('#seccion-resumen-final')
 let visualResumen = document.querySelector('#resumen-productos-final')
 let resumenTotalFinal = document.querySelector('#resumen-total-final')
 
+//filtros
+let contenedorFiltros = document.querySelector('#contenedor-filtros')
+
 let html = ''
-let cantidadProductos = 0
 let pedidos = []
 let incluye = false
 let subtotal = 0
 let resumenTotal = 0
-
 
 listaProductos.addEventListener('click', (event) => {
 
@@ -169,12 +168,9 @@ listaProductos.addEventListener('click', (event) => {
 
 const dibujarPedidos = () => {
 
+    visualPedido.innerHTML = ''
     pedidos.forEach(pedido => {
-
         subtotal += pedido.total
-
-        console.log(pedido.total)
-
         html += `<div class="order-item p-3 border-bottom d-flex justify-content-between align-items-center ">
                     <div>
                         <h6 class="fw-bold mb-0 text-dark">${pedido.nombreProducto}</h6>
@@ -199,13 +195,13 @@ const dibujarPedidos = () => {
     totalFinal.textContent = `Q${subtotal.toFixed(2)}`
     resumenTotal = subtotal
     subtotal = 0
-    visualPedido.innerHTML = html
+    visualPedido.insertAdjacentHTML('afterbegin', html)
     html = ''
 
 }
 
 
-const dibujarProductos = () => {
+const dibujarProductos = (productos) => {
     productos.forEach(producto => {
         html += `
     <div class="col producto-item" data-categoria="Bebida caliente">
@@ -227,6 +223,7 @@ const dibujarProductos = () => {
     </div>
     `
     })
+
     listaProductos.innerHTML = html
     html = ''
 }
@@ -236,9 +233,8 @@ const eliminarProducto = (id) => {
     pedidos = pedidos.filter(pedido => pedido.id != id)
 
     if (pedidos.length == 0) {
-        console.log('agrego cotenedor carrito vacio')
-        carritoVacio.classList.remove('d-none')
 
+        console.log('carrito vacio')
     } else {
         dibujarPedidos()
     }
@@ -251,6 +247,9 @@ const resumenFinal = () => {
         <li>• ${pedido.nombreProducto} x ${pedido.cantidad} = Q ${pedido.total}.00</li>     `
     })
 
+    subtotalPedido.textContent = `Q00.00`
+    impuestoPedido.textContent = `Q00.00`
+    totalFinal.textContent = `Q00.00`
     visualResumen.innerHTML = html
     resumenTotalFinal.textContent = `Q${resumenTotal.toFixed(2)}`
     html = ''
@@ -260,30 +259,48 @@ const resumenFinal = () => {
 
 visualPedido.addEventListener('click', (event) => {
     let clase = event.target.classList.value
+
+    console.log(event.target)
+
     pedidos.forEach(pedido => {
         if (clase.includes(pedido.id)) {
-
             if (event.target.textContent == '+') {
                 pedido.sumarCantidad()
             } else if (event.target.textContent == '-') {
                 pedido.restarCantidad()
             } else if (clase.includes(`${pedido.id}`)) {
                 eliminarProducto(pedido.id)
-                console.log('elemento eliminado')
             }
         }
     })
+
     dibujarPedidos()
-    console.log(pedidos)
 })
 
 btnFinalizar.addEventListener('click', (event) => {
     if (pedidos.length > 0) {
         factura.classList.remove('d-none')
         resumenFinal()
+        dibujarPedidos()
     }
 })
 
+contenedorFiltros.addEventListener('click', (event) => {
+    if (event.target.dataset.categoria != 'todos') {
+        let temporal = productos.filter(producto => event.target.dataset.categoria.toLocaleLowerCase() == producto.categoria.toLocaleLowerCase())
+        dibujarProductos(temporal)
+    } else {
+        dibujarProductos(productos)
+    }
+})
 
-dibujarProductos()
+eliminarPedidos.addEventListener('click', (event) => {
 
+    subtotalPedido.textContent = `Q00.00`
+    impuestoPedido.textContent = `Q00.00`
+    totalFinal.textContent = `Q00.00`
+    pedidos = []
+    dibujarPedidos()
+})
+
+dibujarProductos(productos)
