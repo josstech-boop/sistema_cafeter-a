@@ -16,7 +16,7 @@ class Producto {
     }
 
     set precio(value) {
-        if (value > 0 && value < 100) {
+        if (value > 0 && value < 50) {
             this.#precio = value
         } else {
             throw Error('El precio del cantidad de producto no es válida')
@@ -112,9 +112,9 @@ class Carrito {
         this.#total = this.#cantidad * this.#precio
     }
 }
-
+//Crear productos en objectos
 let producto1 = new Producto('cafe-americano', 'Café Americano', 12.00, 'Bebida caliente', 'Café negro tradicional', './images/Americano.png')
-let producto2 = new Producto('cafe-latte', 'Café Latte', 18.00, 'Bebida caliente', 'Café con leche espumada', './images/coffee-latte.jpg')
+let producto2 = new Producto('cafe-latte', 'Café Latte', 18.00, 'Bebida caliente', 'Café con leche espumada', './images/cafeee-lattle.jpg')
 let producto3 = new Producto('frape-choco', 'Frappe de Chocolate', 25.00, 'Bebida fría', 'Bebida fría con chocolate y crema', './images/frapuccino_de_chocolate.jpg')
 let producto4 = new Producto('smothi-fresa', 'Smoothie de Fresa', 22.00, 'Bebida fría', 'Batido natural de fresa', './images/smoothie-fresa-zarzamora-2.jpg')
 let producto5 = new Producto('muffin', 'Muffin de Vainilla', 15.00, 'Postre', 'Pan dulce suave de vainilla', './images/moffin.jpg')
@@ -122,31 +122,32 @@ let producto6 = new Producto('chees', 'Cheesecake', 28.00, 'Postre', 'Pastel fr�
 let producto7 = new Producto('sandwich', 'Sandwich de Pollo', 30.00, 'Comida', 'Sandwich con pollo y vegetales', './images/sandwich-de-pollo.jpg')
 let producto8 = new Producto('bagel', 'Bagel con Queso', 20.00, 'Comida', 'Bagel tostado con queso crema', './images/bagel-prodimg_1024x.webp')
 
+//Agregarlos en un arreglo
 let productos = [producto1, producto2, producto3, producto4, producto5, producto6, producto7, producto8]
 
+//variables para realizar los eventos
 let listaProductos = document.querySelector('#lista-productos')
 let carritoVacio = document.querySelector('#pedido-vacio-msg')
 let visualPedido = document.querySelector('#contenedor-pedido')
 let eliminarPedidos = document.querySelector('#btn-vaciar-pedido')
-
 let subtotalPedido = document.querySelector('#subtotal-pedido')
 let impuestoPedido = document.querySelector('#impuesto-pedido')
 let totalFinal = document.querySelector('#total-pedido')
-
 let btnFinalizar = document.querySelector('#btn-finalizar')
 let factura = document.querySelector('#seccion-resumen-final')
 let visualResumen = document.querySelector('#resumen-productos-final')
 let resumenTotalFinal = document.querySelector('#resumen-total-final')
-
 //filtros
 let contenedorFiltros = document.querySelector('#contenedor-filtros')
 
+//variables globales
 let html = ''
 let pedidos = []
 let incluye = false
 let subtotal = 0
 let resumenTotal = 0
 
+//Agregar en la lista de pedidos
 listaProductos.addEventListener('click', (event) => {
 
     if (event.target.id != '') {
@@ -158,7 +159,6 @@ listaProductos.addEventListener('click', (event) => {
             let orden = new Carrito(buscar.nombre, buscar.precio, buscar.id)
             pedidos.push(orden)
             dibujarPedidos()
-
         } else {
             pedidos.forEach(pedido => pedido.nombreProducto == buscar.nombre ? pedido.sumarCantidad() : pedido)
             dibujarPedidos()
@@ -166,6 +166,7 @@ listaProductos.addEventListener('click', (event) => {
     }
 })
 
+//Dibujar la lista de pedidos y la seccion de pedido
 const dibujarPedidos = () => {
 
     visualPedido.innerHTML = ''
@@ -195,12 +196,11 @@ const dibujarPedidos = () => {
     totalFinal.textContent = `Q${subtotal.toFixed(2)}`
     resumenTotal = subtotal
     subtotal = 0
-    visualPedido.insertAdjacentHTML('afterbegin', html)
+    visualPedido.innerHTML = html
     html = ''
-
 }
 
-
+// arrow fuction donde le mandan un parametro donde dibuja los productos que se le pide
 const dibujarProductos = (productos) => {
     productos.forEach(producto => {
         html += `
@@ -228,40 +228,40 @@ const dibujarProductos = (productos) => {
     html = ''
 }
 
+//arrow fuction donde se elimina el pedido  
 const eliminarProducto = (id) => {
-
     pedidos = pedidos.filter(pedido => pedido.id != id)
-
     if (pedidos.length == 0) {
-
-        console.log('carrito vacio')
+        carritoVacio.classList.remove('d-none')
     } else {
         dibujarPedidos()
     }
-
 }
 
+//arrow fuction para realizar la factura
 const resumenFinal = () => {
     pedidos.forEach(pedido => {
         html += `
         <li>• ${pedido.nombreProducto} x ${pedido.cantidad} = Q ${pedido.total}.00</li>     `
     })
-
-    subtotalPedido.textContent = `Q00.00`
-    impuestoPedido.textContent = `Q00.00`
-    totalFinal.textContent = `Q00.00`
+    eliminarTodo()
     visualResumen.innerHTML = html
     resumenTotalFinal.textContent = `Q${resumenTotal.toFixed(2)}`
     html = ''
-    pedidos = []
-
 }
 
+//arrow fuction para restaurar todo desde 0
+const eliminarTodo = () => {
+    subtotalPedido.textContent = `Q00.00`
+    impuestoPedido.textContent = `Q00.00`
+    totalFinal.textContent = `Q00.00`
+    carritoVacio.classList.remove('d-none')
+    pedidos = []
+}
+
+//evento donde se suma las cantidad de cada pedido, restan o elimina el pedido 
 visualPedido.addEventListener('click', (event) => {
     let clase = event.target.classList.value
-
-    console.log(event.target)
-
     pedidos.forEach(pedido => {
         if (clase.includes(pedido.id)) {
             if (event.target.textContent == '+') {
@@ -273,18 +273,26 @@ visualPedido.addEventListener('click', (event) => {
             }
         }
     })
-
     dibujarPedidos()
 })
 
+
+//Se muestra la factura en un determinado tiempo y se restaura todo
 btnFinalizar.addEventListener('click', (event) => {
     if (pedidos.length > 0) {
+
         factura.classList.remove('d-none')
+        setTimeout(() => {
+            factura.classList.add('d-none')
+        }, 10000)
+
         resumenFinal()
         dibujarPedidos()
+
     }
 })
 
+//evento donde se realizan filtros
 contenedorFiltros.addEventListener('click', (event) => {
     if (event.target.dataset.categoria != 'todos') {
         let temporal = productos.filter(producto => event.target.dataset.categoria.toLocaleLowerCase() == producto.categoria.toLocaleLowerCase())
@@ -294,12 +302,10 @@ contenedorFiltros.addEventListener('click', (event) => {
     }
 })
 
-eliminarPedidos.addEventListener('click', (event) => {
 
-    subtotalPedido.textContent = `Q00.00`
-    impuestoPedido.textContent = `Q00.00`
-    totalFinal.textContent = `Q00.00`
-    pedidos = []
+//evento donde se elimina por completo todos los pedidos
+eliminarPedidos.addEventListener('click', (event) => {
+    eliminarTodo()
     dibujarPedidos()
 })
 
