@@ -113,8 +113,8 @@ class Carrito {
     }
 }
 //Crear productos en objectos
-let producto1 = new Producto('cafe-americano', 'Café Americano', 12.00, 'Bebida caliente', 'Café negro tradicional', './images/Americano.png')
-let producto2 = new Producto('cafe-latte', 'Café Latte', 18.00, 'Bebida caliente', 'Café con leche espumada', './images/cafeee-lattle.jpg')
+let producto1 = new Producto('cafe-americano', 'Cafe Americano', 12.00, 'Bebida caliente', 'Café negro tradicional', './images/Americano.png')
+let producto2 = new Producto('cafe-latte', 'Cafe Latte', 18.00, 'Bebida caliente', 'Café con leche espumada', './images/cafeee-lattle.jpg')
 let producto3 = new Producto('frape-choco', 'Frappe de Chocolate', 25.00, 'Bebida fría', 'Bebida fría con chocolate y crema', './images/frapuccino_de_chocolate.jpg')
 let producto4 = new Producto('smothi-fresa', 'Smoothie de Fresa', 22.00, 'Bebida fría', 'Batido natural de fresa', './images/smoothie-fresa-zarzamora-2.jpg')
 let producto5 = new Producto('muffin', 'Muffin de Vainilla', 15.00, 'Postre', 'Pan dulce suave de vainilla', './images/moffin.jpg')
@@ -139,6 +139,8 @@ let visualResumen = document.querySelector('#resumen-productos-final')
 let resumenTotalFinal = document.querySelector('#resumen-total-final')
 //filtros
 let contenedorFiltros = document.querySelector('#contenedor-filtros')
+let botonFiltro = document.querySelectorAll('.btn-filter')
+let busqueda = document.querySelector('.form-control')
 
 //variables globales
 let html = ''
@@ -276,7 +278,6 @@ visualPedido.addEventListener('click', (event) => {
     dibujarPedidos()
 })
 
-
 //Se muestra la factura en un determinado tiempo y se restaura todo
 btnFinalizar.addEventListener('click', (event) => {
     if (pedidos.length > 0) {
@@ -291,17 +292,19 @@ btnFinalizar.addEventListener('click', (event) => {
 
     }
 })
-
 //evento donde se realizan filtros
 contenedorFiltros.addEventListener('click', (event) => {
+    botonFiltro.forEach(item => item.classList.remove('active'))
     if (event.target.dataset.categoria != 'todos') {
+        event.target.classList.add('active')
         let temporal = productos.filter(producto => event.target.dataset.categoria.toLocaleLowerCase() == producto.categoria.toLocaleLowerCase())
         dibujarProductos(temporal)
+
     } else {
+        event.target.classList.add('active')
         dibujarProductos(productos)
     }
 })
-
 
 //evento donde se elimina por completo todos los pedidos
 eliminarPedidos.addEventListener('click', (event) => {
@@ -309,3 +312,10 @@ eliminarPedidos.addEventListener('click', (event) => {
     dibujarPedidos()
 })
 
+busqueda.addEventListener('keyup', (event) => {
+
+    let palabra = event.target.value
+    console.log(palabra)
+})
+
+dibujarProductos(productos)

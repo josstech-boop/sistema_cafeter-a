@@ -33,15 +33,23 @@
             <section class="col-lg-8">
 
                 <div class="card p-3 mb-4 border-0 shadow-sm custom-card">
-                    <div class="row g-4 align-items-center">
-                        <div class="col-md-1">
+                    <div class="row align-items-center mb-3">
+                        <div class="col-auto">
+                            <img class="logo-cafeteria" src="./images/firmar.png" alt="logo-cafeteria" width="70px"
+                                height="70px">
+                        </div>
+                        <div class="col">
                             <div class="input-group">
-                                <img class="logo-cafeteria m-3" src="./images/firmar.png" alt="logo-cafeteria"
-                                    width="70px" height="70px">
+                                <span class="input-group-text"><i class="bi bi-search"></i></span>
+                                <input type="text" id="buscador-productos" class="form-control"
+                                    placeholder="Buscar productos..." aria-label="Buscar productos">
                             </div>
                         </div>
-                        <div class="col-md-9">
-                            <div class="d-flex flex-wrap gap-2 justify-content-md-end" id="contenedor-filtros">
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="d-flex flex-wrap gap-2 justify-content-start" id="contenedor-filtros">
                                 <button class="btn btn-filter active" data-categoria="todos">Todas</button>
                                 <button class="btn btn-filter" data-categoria="Bebida caliente">Bebidas
                                     calientes</button>
@@ -49,11 +57,6 @@
                                 <button class="btn btn-filter" data-categoria="Postre">Postres</button>
                                 <button class="btn btn-filter" data-categoria="Comida">Comida</button>
                             </div>
-                            <div class="mt-3 ms-4 ">
-                                <input class="input" type="text" placeholder="Buscar producto">
-
-                            </div>
-
                         </div>
                     </div>
                 </div>
