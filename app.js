@@ -54,6 +54,7 @@ class Carrito {
     #precio
     #cantidad
     #total
+    #impuesto
 
     constructor(nombre, precio, id) {
         this.#id = id
@@ -61,6 +62,7 @@ class Carrito {
         this.#precio = precio
         this.cantidad = 1
         this.total = precio
+        this.#impuesto = this.calcularImpuesto()
     }
 
     set total(value) {
@@ -71,6 +73,10 @@ class Carrito {
         this.#cantidad = value
         this.subtotal()
 
+    }
+
+    set impuesto(value) {
+        this.#impuesto = value
     }
 
     get nombreProducto() {
@@ -92,6 +98,9 @@ class Carrito {
     get id() {
         return this.#id
     }
+    get impuesto() {
+        return this.#impuesto
+    }
 
     precioTotal(cantidad) {
         let calcular = this.#precio * cantidad
@@ -110,6 +119,12 @@ class Carrito {
 
     subtotal() {
         this.#total = this.#cantidad * this.#precio
+        this.#impuesto = this.calcularImpuesto()
+
+    }
+
+    calcularImpuesto() {
+        return this.#total * 0.05
     }
 }
 //Crear productos en objectos
@@ -147,6 +162,7 @@ let html = ''
 let pedidos = []
 let incluye = false
 let subtotal = 0
+let subImpuesto = 0
 let resumenTotal = 0
 
 //Agregar en la lista de pedidos
@@ -174,6 +190,7 @@ const dibujarPedidos = () => {
     visualPedido.innerHTML = ''
     pedidos.forEach(pedido => {
         subtotal += pedido.total
+        subImpuesto += pedido.impuesto
         html += `<div class="order-item p-3 border-bottom d-flex justify-content-between align-items-center ">
                     <div>
                         <h6 class="fw-bold mb-0 text-dark">${pedido.nombreProducto}</h6>
@@ -191,13 +208,13 @@ const dibujarPedidos = () => {
                 </div>`
     })
 
-    let calcularImpuesto = subtotal * 0.05
-    let totalSinImpuesto = subtotal - calcularImpuesto
-    subtotalPedido.textContent = `Q${totalSinImpuesto.toFixed(2)}`
-    impuestoPedido.textContent = `Q${calcularImpuesto.toFixed(2)}`
+    let calcularSinImpuesto = subtotal - subImpuesto
+    subtotalPedido.textContent = `Q${calcularSinImpuesto.toFixed(2)}`
+    impuestoPedido.textContent = `Q${subImpuesto.toFixed(2)}`
     totalFinal.textContent = `Q${subtotal.toFixed(2)}`
     resumenTotal = subtotal
     subtotal = 0
+    subImpuesto = 0
     visualPedido.innerHTML = html
     html = ''
 }
@@ -312,10 +329,12 @@ eliminarPedidos.addEventListener('click', (event) => {
     dibujarPedidos()
 })
 
+//evento donde se implemento filtro de busqueda (input)
 busqueda.addEventListener('keyup', (event) => {
-
     let palabra = event.target.value
-    console.log(palabra)
+    let temporal = productos.filter(producto => producto.nombre.toLocaleLowerCase().includes(palabra.toLocaleLowerCase()))
+    dibujarProductos(temporal)
+
 })
 
 dibujarProductos(productos)
